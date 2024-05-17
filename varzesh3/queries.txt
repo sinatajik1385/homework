@@ -1,0 +1,51 @@
+CREATE TABLE IF NOT EXISTS teams (
+	team_pk varchar(8) not null primary key,
+	team_name varchar (25) not null
+);
+
+CREATE TABLE IF NOT EXISTS players (
+	player_pk varchar(8) not null primary key,
+	player_name varchar (25) not null,
+	team varchar (8) not null ,
+	CONSTRAINT fk_players_to_team  FOREIGN KEY (team) 
+		REFERENCES  teams (team_pk) MATCH SIMPLE
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS leagues (
+	leagues_pk varchar(8) not null primary key,
+	team1 varchar (8) not null ,
+	team_name1 varchar (25) not null,
+	team2 varchar (8) not null ,
+	team_name2 varchar (25) not null,
+	team1_goals int ,
+	team2_goals int ,
+	match_runtime time ,
+	CONSTRAINT fk_leagues_to_team1 FOREIGN KEY (team1) 
+		REFERENCES  teams (team_pk) MATCH SIMPLE
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT fk_leagues_to_team2 FOREIGN KEY (team2) 
+		REFERENCES  teams (team_pk) MATCH SIMPLE
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS posters (
+	poster_id varchar(8) not null primary key,
+	poster_name varchar (25) not null ,
+	poster_age int 
+	CHECK (poster_age >= 18)
+);
+
+CREATE TABLE IF NOT EXISTS blogs (
+	blog_id varchar(8) not null primary key,
+	blog_summary varchar (255) not null ,
+	blog_date DATE not null,
+	original_poster varchar (8) ,
+	CONSTRAINT fk_blog_to_poster FOREIGN KEY (original_poster) 
+		REFERENCES  posters (poster_id) MATCH SIMPLE
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+);
